@@ -1,0 +1,3583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Script Name="Vehicle routing (JSPRIT)"
+  OptionId="Vehicle routing (JSPRIT)"
+  ScriptEditorType="WIZARD_GENERATED_EDITOR" launchMultiple="false"
+  overrideVisibleParameters="false" refreshButtonAlwaysEnabled="false"
+  showLastRefreshedTime="false" synchronised="false" userCanEdit="true">
+  <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;The vehicle routing module uses the jsprit vehicle routing library. It can model standard vehicle routing problems and pickup-deliver vehicle routing problems with or without time windows. Any number of capacity contraints can be set.&lt;/html&gt;</EditorLabel>
+  <ComponentConfig component="com.opendoorlogistics.components.jsprit"
+    configId="Settings" userCanEdit="true">
+    <Config>
+      <VRPConfig deliveriesBeforePickups="false"
+        infiniteFleetSize="false" linkedPickupsAtStartOnly="false"
+        nbQuantities="1" nbThreads="1" outputStraightLines="false">
+        <algorithm>
+          <clusterBestWeight>1.0</clusterBestWeight>
+          <clusterRegretWeight>0.0</clusterRegretWeight>
+          <constructionRegret>true</constructionRegret>
+          <fractionFixedVehicleCostUsedDuringInsertion>0.5</fractionFixedVehicleCostUsedDuringInsertion>
+          <radialBestWeight>1.0</radialBestWeight>
+          <radialRegretWeight>0.0</radialRegretWeight>
+          <randomBestWeight>1.0</randomBestWeight>
+          <randomRegretWeight>0.0</randomRegretWeight>
+          <vehicleSwitch>false</vehicleSwitch>
+          <worstBestWeight>1.0</worstBestWeight>
+          <worstRegretWeight>0.0</worstRegretWeight>
+        </algorithm>
+        <distances>
+          <externalConfig>
+            <nonDefaultFilename/>
+            <useDefaultFile>true</useDefaultFile>
+          </externalConfig>
+          <graphhopperConfig>
+            <graphDirectory>C:\vrp_ODL\morocco-latest.osm-gh</graphDirectory>
+            <timeMultiplier>1.0</timeMultiplier>
+          </graphhopperConfig>
+          <greatCircleConfig>
+            <DistanceMultiplier>1.0</DistanceMultiplier>
+            <SpeedMetresPerSec>22.352</SpeedMetresPerSec>
+          </greatCircleConfig>
+          <method>ROAD_NETWORK</method>
+          <outputConfig>
+            <DistanceWeighting>1.0</DistanceWeighting>
+            <DistanceOutputUnit>KILOMETRES</DistanceOutputUnit>
+            <TimeOutputUnit>HOURS</TimeOutputUnit>
+            <OutputTime>DISTANCE</OutputTime>
+            <TimeWeighting>1.0</TimeWeighting>
+          </outputConfig>
+        </distances>
+        <nbIterations>500</nbIterations>
+      </VRPConfig>
+    </Config>
+  </ComponentConfig>
+  <Adapter flags="0" id="Input data" userCanEdit="true">
+    <EditorLabel>&lt;html&gt;&lt;h3&gt;Data description&lt;/h3&gt;The vehicle routing model requires three tables - &lt;em&gt;stops&lt;/em&gt;, &lt;em&gt;vehicles&lt;/em&gt; and &lt;em&gt;stop-order&lt;/em&gt;.&lt;ol&gt;&lt;li&gt;&lt;em&gt;Stops&lt;/em&gt; contains the individual locations which must be visited.&lt;/li&gt;&lt;li&gt;&lt;em&gt;Vehicle-Types&lt;/em&gt; which contains the types of vehicles available to serve the stops.&lt;/li&gt;&lt;li&gt;The generated vehicle routes are then saved to the &lt;em&gt;stops-order table.&lt;/em&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/html&gt;</EditorLabel>
+    <adapterType>NORMAL</adapterType>
+    <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+      Join="false" MaxNumberRows="1000" fromDatastore="external"
+      fromTable="Stops" isBatchKey="false" isGroupBy="false"
+      isOptional="false" isReportKey="false" name="Stops">
+      <flags>1920</flags>
+      <AdaptedColumn from="id" isBatchKey="false" isGroupBy="false"
+        isOptional="false" isReportKey="false" name="id" sortField="NO"
+        type="STRING" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="job-id" isBatchKey="false" isGroupBy="false"
+        isOptional="true" isReportKey="false" name="job-id"
+        sortField="NO" type="STRING" useFormula="false">
+        <flags>1</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="type" isBatchKey="false" isGroupBy="false"
+        isOptional="true" isReportKey="false" name="type" sortField="NO"
+        type="STRING" useFormula="false">
+        <flags>1</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="name" isBatchKey="false" isGroupBy="false"
+        isOptional="true" isReportKey="false" name="name" sortField="NO"
+        type="STRING" useFormula="false">
+        <flags>1</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="address" isBatchKey="false" isGroupBy="false"
+        isOptional="true" isReportKey="false" name="address"
+        sortField="NO" type="STRING" useFormula="false">
+        <flags>1</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="latitude" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="latitude" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="longitude" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="longitude" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="service-duration" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="service-duration" sortField="NO" type="TIME" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="start-time" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="start-time" sortField="NO" type="TIME" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="end-time" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="end-time" sortField="NO" type="TIME" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="quantity" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="quantity" sortField="NO" type="LONG" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="required-skills" isBatchKey="false"
+        isGroupBy="false" isOptional="true" isReportKey="false"
+        name="required-skills" sortField="NO" type="STRING" useFormula="false">
+        <flags>1</flags>
+      </AdaptedColumn>
+      <FilterFormula/>
+    </AdaptedTable>
+    <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+      Join="false" MaxNumberRows="1000" fromDatastore="external"
+      fromTable="VehicleTypes" isBatchKey="false" isGroupBy="false"
+      isOptional="false" isReportKey="false" name="VehicleTypes">
+      <flags>1920</flags>
+      <AdaptedColumn from="vehicle-name" isBatchKey="false"
+        isGroupBy="false" isOptional="true" isReportKey="false"
+        name="vehicle-name" sortField="NO" type="STRING" useFormula="false">
+        <flags>1</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="vehicle-id" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="vehicle-id" sortField="NO" type="STRING" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="start-latitude" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="start-latitude" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="start-longitude" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="start-longitude" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="end-latitude" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="end-latitude" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="end-longitude" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="end-longitude" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="start-time" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="start-time" sortField="NO" type="TIME" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="end-time" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="end-time" sortField="NO" type="TIME" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="capacity" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="capacity" sortField="NO" type="LONG" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="speed-multiplier" isBatchKey="false"
+        isGroupBy="false" isOptional="true" isReportKey="false"
+        name="speed-multiplier" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>1</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="cost-per-km" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="cost-per-km" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="cost-per-hour" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="cost-per-hour" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="waiting-cost-per-hour" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="waiting-cost-per-hour" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="fixed-cost" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="false"
+        name="fixed-cost" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="parking-cost" isBatchKey="false"
+        isGroupBy="false" isOptional="true" isReportKey="false"
+        name="parking-cost" sortField="NO" type="DOUBLE" useFormula="false">
+        <flags>1</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="skills" isBatchKey="false" isGroupBy="false"
+        isOptional="true" isReportKey="false" name="skills"
+        sortField="NO" type="STRING" useFormula="false">
+        <flags>1</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="number-of-vehicles" isBatchKey="false"
+        isGroupBy="false" isOptional="true" isReportKey="false"
+        name="number-of-vehicles" sortField="NO" type="LONG" useFormula="false">
+        <flags>1</flags>
+      </AdaptedColumn>
+      <FilterFormula/>
+    </AdaptedTable>
+    <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+      Join="false" MaxNumberRows="1000" fromDatastore="external"
+      fromTable="Stop-order" isBatchKey="false" isGroupBy="false"
+      isOptional="false" isReportKey="false" name="Stop-order">
+      <flags>1920</flags>
+      <AdaptedColumn from="vehicle-id" isBatchKey="false"
+        isGroupBy="false" isOptional="false" isReportKey="true"
+        name="vehicle-id" sortField="NO" type="STRING" useFormula="false">
+        <flags>16</flags>
+      </AdaptedColumn>
+      <AdaptedColumn from="stop-id" isBatchKey="false" isGroupBy="false"
+        isOptional="false" isReportKey="false" name="stop-id"
+        sortField="NO" type="STRING" useFormula="false">
+        <flags>0</flags>
+      </AdaptedColumn>
+      <FilterFormula/>
+    </AdaptedTable>
+  </Adapter>
+  <Option Name="Optimise" OptionId="Optimise" launchMultiple="false"
+    overrideVisibleParameters="false" refreshButtonAlwaysEnabled="false"
+    showLastRefreshedTime="false" synchronised="false" userCanEdit="true">
+    <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;Run this option to create a new set of optimised vehicle routes. Pre-existing vehicle routes will be deleted.&lt;/html&gt;</EditorLabel>
+    <Instruction Name="Optimise routes"
+      component="com.opendoorlogistics.components.jsprit"
+      configId="Settings" datastore="Input data" executionMode="-1"
+      outputDatastore="Output of Vehicle routing (JSPRIT)"
+      userCanEdit="true" uuid="ef232a19-48e7-4262-b12c-c1ed4f29d264"/>
+  </Option>
+  <Option Name="View solution" OptionId="View solution"
+    launchMultiple="false" overrideVisibleParameters="false"
+    refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+    synchronised="false" userCanEdit="true">
+    <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;This option generates statistics for your routes - e.g. total distance, total time, arrival time at stops etc.&lt;/html&gt;</EditorLabel>
+    <Instruction Name="Generate solution details"
+      component="com.opendoorlogistics.components.jsprit"
+      configId="Settings" datastore="Input data" executionMode="1000"
+      outputDatastore="Solution details" userCanEdit="true" uuid="51bfe0f4-5317-48ab-a26b-b6229f69888d"/>
+    <Option Name="Edit routes" OptionId="Edit routes"
+      launchMultiple="false" overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="true" userCanEdit="true">
+      <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;Run this option to edit the vehicle routes. You can drag-and-drop stops between different routes.&lt;/html&gt;</EditorLabel>
+      <Adapter flags="0" id="Input data (editor)" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000" fromDatastore="Input data"
+          fromTable="Stops" isBatchKey="false" isGroupBy="false"
+          isOptional="false" isReportKey="false" name="Tasks">
+          <flags>18304</flags>
+          <AdaptedColumn from="id" isBatchKey="false" isGroupBy="false"
+            isOptional="false" isReportKey="false" name="id"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="name" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="name" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="type" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="Type" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="address" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="Address" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000" fromDatastore="Input data"
+          fromTable="VehicleTypes" isBatchKey="false" isGroupBy="false"
+          isOptional="false" isReportKey="false" name="ResourceTypes">
+          <flags>1920</flags>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="id" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="vehicle-name" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="name" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="number-of-vehicles" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="resource-count" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000" fromDatastore="Input data"
+          fromTable="Stop-order" isBatchKey="false" isGroupBy="false"
+          isOptional="false" isReportKey="false" name="Task-Order">
+          <flags>18304</flags>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="resource-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="task-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="if( lookup(&quot;stop-id&quot;,&quot;Solution details,stop-details&quot;, &quot;stop-id&quot;,&quot;has-violation&quot;) ,color(1,0.9,0.9) ,null)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="colour" sortField="NO"
+            type="COLOUR" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="lookup(&quot;stop-id&quot;, &quot;stops&quot;, &quot;id&quot;,&quot;type&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="Type" sortField="NO" type="STRING" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="lookup(&quot;stop-id&quot;, &quot;stops&quot;, &quot;id&quot;,&quot;address&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="Address" sortField="NO"
+            type="STRING" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="lookup(&quot;stop-id&quot;,&quot;Solution details,stop-details&quot;, &quot;stop-id&quot;,&quot;arrival-time&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="Arrival time" sortField="NO"
+            type="STRING" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="route-details"
+          isBatchKey="false" isGroupBy="false" isOptional="true"
+          isReportKey="false" name="ResourceDescriptions">
+          <flags>1921</flags>
+          <AdaptedColumn
+            formula="&quot;&lt;html>&quot; &amp; &quot;&lt;b>Quantity&lt;/b>:&quot; &amp; &quot;delivered-quantity&quot; &amp; &quot;/&quot; &amp; &quot;capacity&quot; &amp; &quot;&lt;br/>&quot; &amp; &quot;&lt;b>Start-time&lt;/b>: &quot; &amp; &quot;start-time&quot; &amp; &quot;&amp;nbsp&amp;nbsp &lt;b>End-time&lt;/b>: &quot; &amp; &quot;end-time&quot; &amp; &quot;&amp;nbsp&amp;nbsp &lt;b>TW violation&lt;/b>: &quot; &amp; &quot;time-window-violation&quot; &amp; &quot;&lt;br/>&lt;b>Travel-km&lt;/b>: &quot; &amp; decimalformat(&quot;0.000&quot;,&quot;travel-km&quot;) &amp; &quot;&amp;nbsp&amp;nbsp &lt;b>Travel-time&lt;/b>: &quot; &amp; &quot;travel-time&quot; &amp; &quot;&lt;/html>&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="Description" sortField="NO"
+            type="STRING" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="resource-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+      </Adapter>
+      <Instruction Name="Edit routes"
+        component="com.opendoorlogistics.components.scheduleeditor"
+        datastore="Input data (editor)" executionMode="-1"
+        userCanEdit="true" uuid="7a3f87a8-8d01-435b-ac34-5d636bb246e8"/>
+    </Option>
+    <Option Name="View routes in map" OptionId="View routes in map"
+      launchMultiple="false" overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="true" userCanEdit="true">
+      <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;Run this option to view the vehicle routes in a map.&lt;/html&gt;</EditorLabel>
+      <Adapter flags="0" id="Map view" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="stop-details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="drawables">
+          <flags>67456</flags>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Latitude"
+            sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Longitude"
+            sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Geometry of the object. If this is not set a point is draw at the latitude-longitude instead."
+            from="incoming-path" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Geometry"
+            sortField="NO" type="GEOM" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The text of this field will be shown on the map beside the point."
+            from="vehicle-id" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Label"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="colourmultiply(randcolour(&quot;vehicle-id&quot;),0.7)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Colour" sortField="NO"
+            type="COLOUR" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="&lt;html>Name of the symbol used when drawing a point.&lt;br>If this is null a circle is used. &lt;br>Available symbols are &quot;triangle&quot;,&quot;inverted-triangle&quot;,&quot;diamond&quot;,&quot;square&quot;,&quot;pentagon&quot;,&quot;star&quot;,&quot;fat-star&quot;,&quot;hexagon&quot;,&quot;circle&quot;.&lt;/html>"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Symbol" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set to less than 1 if you want the object to be partially see-through, 0 for completely invisible."
+            formula="1.0" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Opaque"
+            sortField="NO" type="DOUBLE" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="ColourKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn description="The width in pixels of the point."
+            formula="2" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="PixelWidth"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The font size for the name. A value of 0 takes the default size. Less than zero deactivates the label."
+            formula="12" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="FontSize"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set this to 1 to draw an outline around the point or 0 otherwise."
+            formula="1" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="DrawOutline"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Use this field to override the colour shown in the legend for the object."
+            formula="randcolour(&quot;vehicle-id&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="LegendColour" sortField="NO"
+            type="COLOUR" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to populate the map's legend."
+            from="vehicle-id" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LegendKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to select objects when you are drawing the map by calling the image formula."
+            from="vehicle-id" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="ImageFormulaKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LabelGroupKey" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="NonOverlappingPolygonLayerGroupKey" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Tooltip"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Selectable" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="LabelPositioningOption" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LabelColour"
+            sortField="NO" type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LabelPriority" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Flags" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MinZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1000" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MaxZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <FilterFormula>len("incoming-path")&gt;0</FilterFormula>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="stop-details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="drawables">
+          <flags>67456</flags>
+          <AdaptedColumn from="stop-latitude" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-longitude" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Geometry of the object. If this is not set a point is draw at the latitude-longitude instead."
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Geometry" sortField="NO"
+            type="GEOM" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The text of this field will be shown on the map beside the point."
+            formula="if(type=&quot;depot&quot;,&quot;depot&quot;,&quot;stop-number&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Label" sortField="NO"
+            type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="randcolour(&quot;vehicle-id&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Colour" sortField="NO"
+            type="COLOUR" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="&lt;html>Name of the symbol used when drawing a point.&lt;br>If this is null a circle is used. &lt;br>Available symbols are &quot;triangle&quot;,&quot;inverted-triangle&quot;,&quot;diamond&quot;,&quot;square&quot;,&quot;pentagon&quot;,&quot;star&quot;,&quot;fat-star&quot;,&quot;hexagon&quot;,&quot;circle&quot;.&lt;/html>"
+            formula="switch(type,&quot;depot&quot;,&quot;fat-star&quot;,&quot;LD&quot;,&quot;inverted-triangle&quot;,&quot;D&quot;,&quot;circle&quot;,&quot;LP&quot;,&quot;triangle&quot;,&quot;P&quot;,&quot;square&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Symbol" sortField="NO"
+            type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set to less than 1 if you want the object to be partially see-through, 0 for completely invisible."
+            formula="1.0" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Opaque"
+            sortField="NO" type="DOUBLE" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="ColourKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn description="The width in pixels of the point."
+            formula="switch(type,&quot;depot&quot;,30,&quot;LD&quot;,18,&quot;D&quot;,12,&quot;LP&quot;,18,&quot;P&quot;,14)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="PixelWidth" sortField="NO"
+            type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The font size for the name. A value of 0 takes the default size. Less than zero deactivates the label."
+            formula="12" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="FontSize"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set this to 1 to draw an outline around the point or 0 otherwise."
+            formula="true" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="DrawOutline"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Use this field to override the colour shown in the legend for the object."
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="LegendColour" sortField="NO"
+            type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to populate the map's legend."
+            from="vehicle-id" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LegendKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to select objects when you are drawing the map by calling the image formula."
+            from="vehicle-id" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="ImageFormulaKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LabelGroupKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="NonOverlappingPolygonLayerGroupKey" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="&quot;arrival-time&quot; &amp; &quot; - &quot;  &amp; &quot;stop-name&quot; &amp; &quot;, &quot; &amp; &quot;stop-address&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Tooltip" sortField="NO"
+            type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Selectable" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="LabelPositioningOption" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LabelColour"
+            sortField="NO" type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LabelPriority" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Flags" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MinZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1000" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MaxZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000" fromDatastore="Input data"
+          fromTable="Stops" isBatchKey="false" isGroupBy="false"
+          isOptional="false" isReportKey="false" name="drawables">
+          <flags>67456</flags>
+          <AdaptedColumn from="latitude" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="longitude" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Geometry of the object. If this is not set a point is draw at the latitude-longitude instead."
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Geometry" sortField="NO"
+            type="GEOM" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The text of this field will be shown on the map beside the point."
+            from="id" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Label"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="&quot;black&quot;" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Colour" sortField="NO" type="COLOUR" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="&lt;html>Name of the symbol used when drawing a point.&lt;br>If this is null a circle is used. &lt;br>Available symbols are &quot;triangle&quot;,&quot;inverted-triangle&quot;,&quot;diamond&quot;,&quot;square&quot;,&quot;pentagon&quot;,&quot;star&quot;,&quot;fat-star&quot;,&quot;hexagon&quot;,&quot;circle&quot;.&lt;/html>"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Symbol" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set to less than 1 if you want the object to be partially see-through, 0 for completely invisible."
+            formula="1.0" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Opaque"
+            sortField="NO" type="DOUBLE" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="ColourKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn description="The width in pixels of the point."
+            formula="10" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="PixelWidth"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The font size for the name. A value of 0 takes the default size. Less than zero deactivates the label."
+            formula="12" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="FontSize"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set this to 1 to draw an outline around the point or 0 otherwise."
+            formula="1" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="DrawOutline"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Use this field to override the colour shown in the legend for the object."
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="LegendColour" sortField="NO"
+            type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to populate the map's legend."
+            formula="&quot;Unassigned&quot;" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LegendKey" sortField="NO" type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to select objects when you are drawing the map by calling the image formula."
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="ImageFormulaKey" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LabelGroupKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="NonOverlappingPolygonLayerGroupKey" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Tooltip"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Selectable" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="LabelPositioningOption" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LabelColour"
+            sortField="NO" type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LabelPriority" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Flags" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MinZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1000" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MaxZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <FilterFormula>lookupcount(id,"Input data, stop-order","stop-id")=0</FilterFormula>
+        </AdaptedTable>
+      </Adapter>
+      <Instruction
+        component="com.opendoorlogistics.studio.uicomponents.map"
+        datastore="Map view" executionMode="-1" userCanEdit="true" uuid="7bba0bda-59e1-43fa-9eaf-ff7351c1dd6e">
+        <Config>
+          <MapConfig>
+            <useCustomTooltips>true</useCustomTooltips>
+          </MapConfig>
+        </Config>
+        <Config>
+          <MapConfig>
+            <useCustomTooltips>true</useCustomTooltips>
+          </MapConfig>
+        </Config>
+      </Instruction>
+    </Option>
+    <Option Name="View stop-details" OptionId="View stop-details"
+      launchMultiple="false" overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="true" userCanEdit="true">
+      <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;Run this option to view the table stop-details&lt;/html&gt;</EditorLabel>
+      <Adapter flags="0" id="Adapter for table stop-details" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="Stop-Details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="Stop-Details">
+          <flags>1920</flags>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="true"
+            name="vehicle-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>16</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="job-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="job-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="vehicle-name" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="vehicle-name" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-number" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-number" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-name" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-name" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="type" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="type" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-address" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-address" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-latitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-longitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="required-skills" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="required-skills" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="has-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="has-violation" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="arrival-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="arrival-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="waiting-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="waiting-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-duration" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-duration" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="leave-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="leave-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="start-time-window" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="start-time-window" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="end-time-window" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="end-time-window" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="time-window-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="time-window-violation" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="arrival-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="arrival-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="arrival-capacity-violation"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="arrival-capacity-violation"
+            sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="leave-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="leave-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="leave-capacity-violation"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="leave-capacity-violation"
+            sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-cost" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-cost" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-km" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-km" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="total-travel-cost" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="total-travel-cost" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="total-travel-km" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="total-travel-km" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="total-travel-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="total-travel-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="if(&quot;has-violation&quot;, color(0.75,0,0), null)"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="row-font-colour" sortField="NO"
+            type="COLOUR" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+      </Adapter>
+      <Instruction
+        component="com.opendoorlogistics.studio.uicomponents.showtable"
+        datastore="Adapter for table stop-details" executionMode="-1"
+        outputDatastore="Output of Show table" userCanEdit="true" uuid="59fcd66b-53d2-4a85-ad76-c653fa518d1e">
+        <Config>
+          <queryTableConfig showTableControl="true" useCopyOfTable="false"/>
+        </Config>
+        <Config>
+          <queryTableConfig showTableControl="true" useCopyOfTable="false"/>
+        </Config>
+      </Instruction>
+    </Option>
+    <Option Name="View route-details" OptionId="View route-details"
+      launchMultiple="false" overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="true" userCanEdit="true">
+      <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;Run this option to view the table route-details&lt;/html&gt;</EditorLabel>
+      <Adapter flags="0" id="Adapter for table route-details" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="Route-Details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="Route-Details">
+          <flags>1920</flags>
+          <AdaptedColumn from="vehicle-name" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="vehicle-name" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="true"
+            name="vehicle-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>16</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="skills" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="skills" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="speed-multiplier" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="speed-multiplier" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stops-count" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stops-count" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="start-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="start-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="end-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="end-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="has-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="has-violation" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="capacity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="capacity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="capacity-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="capacity-violation" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="deliveries-count" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="deliveries-count" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="delivered-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="delivered-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="end-time-window" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="end-time-window" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="picked-up-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="picked-up-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="pickups-count" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="pickups-count" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="start-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="start-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="start-time-window" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="start-time-window" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="time-window-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="time-window-violation" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-cost" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-cost" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-km" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-km" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="waiting-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="waiting-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="if(&quot;has-violation&quot;, color(0.75,0,0), null)"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="row-font-colour" sortField="NO"
+            type="COLOUR" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+      </Adapter>
+      <Instruction
+        component="com.opendoorlogistics.studio.uicomponents.showtable"
+        datastore="Adapter for table route-details" executionMode="-1"
+        outputDatastore="Output of Show table1" userCanEdit="true" uuid="ffed5ab6-3705-4d7f-b8f8-41952cd20f58">
+        <Config>
+          <queryTableConfig showTableControl="true" useCopyOfTable="false"/>
+        </Config>
+        <Config>
+          <queryTableConfig showTableControl="true" useCopyOfTable="false"/>
+        </Config>
+      </Instruction>
+    </Option>
+    <Option Name="View solution-details"
+      OptionId="View solution-details" launchMultiple="false"
+      overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="true" userCanEdit="true">
+      <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;Run this option to view the table solution-details&lt;/html&gt;</EditorLabel>
+      <Adapter flags="0" id="Adapter for table solution-details" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="Solution-Details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="Solution-Details">
+          <flags>1920</flags>
+          <AdaptedColumn from="used-routes" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="used-routes" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="unassigned-stops" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="unassigned-stops" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="assigned-stops" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="assigned-stops" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="capacity-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="capacity-violation" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="has-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="has-violation" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="deliveries" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="deliveries" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="delivered-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="delivered-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="picked-up-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="picked-up-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="pickups" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="pickups" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="time-window-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="time-window-violation" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-cost" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-cost" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-km" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-km" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="waiting-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="waiting-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="if(&quot;has-violation&quot;, color(0.75,0,0), null)"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="row-font-colour" sortField="NO"
+            type="COLOUR" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+      </Adapter>
+      <Instruction
+        component="com.opendoorlogistics.studio.uicomponents.showtable"
+        datastore="Adapter for table solution-details"
+        executionMode="-1" outputDatastore="Output of Show table2"
+        userCanEdit="true" uuid="9af0d2ed-09e1-4964-b7d6-070851f670de">
+        <Config>
+          <queryTableConfig showTableControl="true" useCopyOfTable="false"/>
+        </Config>
+        <Config>
+          <queryTableConfig showTableControl="true" useCopyOfTable="false"/>
+        </Config>
+      </Instruction>
+    </Option>
+    <Option Name="View unassigned stops"
+      OptionId="View unassigned stops" launchMultiple="false"
+      overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="true" userCanEdit="true">
+      <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;Run this option to view stops not loaded onto any route.&lt;/html&gt;</EditorLabel>
+      <Adapter flags="0" id="Unassigned stops data adapter" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000" fromDatastore="Input data"
+          fromTable="Stops" isBatchKey="false" isGroupBy="false"
+          isOptional="false" isReportKey="false" name="Unassigned stops">
+          <flags>1920</flags>
+          <AdaptedColumn from="id" isBatchKey="false" isGroupBy="false"
+            isOptional="false" isReportKey="false" name="id"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="job-id" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="job-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="type" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="type" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="name" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="name" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="address" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="address" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="latitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="longitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="service-duration" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="service-duration" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="start-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="start-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="end-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="end-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="required-skills" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="required-skills" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <FilterFormula>lookupcount(id,"Input data, stop-order","stop-id")=0</FilterFormula>
+        </AdaptedTable>
+      </Adapter>
+      <Instruction
+        component="com.opendoorlogistics.studio.uicomponents.showtable"
+        datastore="Unassigned stops data adapter" executionMode="-1"
+        outputDatastore="Output of Show table3" userCanEdit="true" uuid="e09b0810-4958-495d-bbe8-1924e4855e5b">
+        <Config>
+          <queryTableConfig showTableControl="true" useCopyOfTable="false"/>
+        </Config>
+        <Config>
+          <queryTableConfig showTableControl="true" useCopyOfTable="false"/>
+        </Config>
+      </Instruction>
+    </Option>
+    <Option Name="Reports" OptionId="Reports" launchMultiple="false"
+      overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="false" userCanEdit="true">
+      <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;Run this generate route reports which can be exported to pdf, html etc.&lt;/html&gt;</EditorLabel>
+      <Adapter flags="0" id="Report input" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Reporter map view" fromTable="drawables"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="Header map">
+          <flags>67456</flags>
+          <AdaptedColumn from="Latitude" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="Longitude" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Geometry of the object. If this is not set a point is draw at the latitude-longitude instead."
+            from="Geometry" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Geometry"
+            sortField="NO" type="GEOM" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The text of this field will be shown on the map beside the point."
+            from="Label" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Label"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="Colour" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Colour" sortField="NO" type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="&lt;html>Name of the symbol used when drawing a point.&lt;br>If this is null a circle is used. &lt;br>Available symbols are &quot;triangle&quot;,&quot;inverted-triangle&quot;,&quot;diamond&quot;,&quot;square&quot;,&quot;pentagon&quot;,&quot;star&quot;,&quot;fat-star&quot;,&quot;hexagon&quot;,&quot;circle&quot;.&lt;/html>"
+            from="Symbol" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Symbol"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set to less than 1 if you want the object to be partially see-through, 0 for completely invisible."
+            from="Opaque" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Opaque"
+            sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="ColourKey" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="ColourKey" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn description="The width in pixels of the point."
+            from="PixelWidth" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="PixelWidth"
+            sortField="NO" type="LONG" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The font size for the name. A value of 0 takes the default size. Less than zero deactivates the label."
+            from="FontSize" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="FontSize"
+            sortField="NO" type="LONG" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set this to 1 to draw an outline around the point or 0 otherwise."
+            from="DrawOutline" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="DrawOutline"
+            sortField="NO" type="LONG" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Use this field to override the colour shown in the legend for the object."
+            from="LegendColour" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LegendColour"
+            sortField="NO" type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to populate the map's legend."
+            from="LegendKey" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LegendKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to select objects when you are drawing the map by calling the image formula."
+            from="ImageFormulaKey" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="ImageFormulaKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="LabelGroupKey" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LabelGroupKey" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="NonOverlappingPolygonLayerGroupKey"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false"
+            name="NonOverlappingPolygonLayerGroupKey" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="Tooltip" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Tooltip" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="Selectable" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Selectable" sortField="NO" type="LONG" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="LabelPositioningOption"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="LabelPositioningOption"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="LabelColour" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LabelColour" sortField="NO" type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="LabelPriority" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LabelPriority" sortField="NO" type="LONG" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="Flags" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Flags" sortField="NO" type="LONG" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="MinZoom" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MinZoom" sortField="NO" type="LONG" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="MaxZoom" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MaxZoom" sortField="NO" type="LONG" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="route-details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="Routes">
+          <flags>0</flags>
+          <AdaptedColumn from="vehicle-name" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="vehicle-name" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="true"
+            name="vehicle-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>16</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stops-count" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stops-count" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-km" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-km" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="printableimage(&quot;vehicle-id&quot;, &quot;Reporter map view, drawables&quot;, 1, 5 , 5, 200)"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="Picture" sortField="NO"
+            type="IMAGE" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="stop-details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="Stops">
+          <flags>0</flags>
+          <AdaptedColumn from="stop-number" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-number" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-name" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-name" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-address" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-address" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="arrival-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="arrival-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="true"
+            name="vehicle-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>16</flags>
+          </AdaptedColumn>
+          <FilterFormula>"type"!="depot"</FilterFormula>
+        </AdaptedTable>
+      </Adapter>
+      <Adapter flags="0" id="Reporter map view" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="stop-details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="drawables">
+          <flags>67456</flags>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Latitude"
+            sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Longitude"
+            sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Geometry of the object. If this is not set a point is draw at the latitude-longitude instead."
+            from="incoming-path" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Geometry"
+            sortField="NO" type="GEOM" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The text of this field will be shown on the map beside the point."
+            from="vehicle-id" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Label"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="colourmultiply(randcolour(&quot;vehicle-id&quot;),0.7)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Colour" sortField="NO"
+            type="COLOUR" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="&lt;html>Name of the symbol used when drawing a point.&lt;br>If this is null a circle is used. &lt;br>Available symbols are &quot;triangle&quot;,&quot;inverted-triangle&quot;,&quot;diamond&quot;,&quot;square&quot;,&quot;pentagon&quot;,&quot;star&quot;,&quot;fat-star&quot;,&quot;hexagon&quot;,&quot;circle&quot;.&lt;/html>"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Symbol" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set to less than 1 if you want the object to be partially see-through, 0 for completely invisible."
+            formula="1.0" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Opaque"
+            sortField="NO" type="DOUBLE" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="ColourKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn description="The width in pixels of the point."
+            formula="10" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="PixelWidth"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The font size for the name. A value of 0 takes the default size. Less than zero deactivates the label."
+            formula="12" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="FontSize"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set this to 1 to draw an outline around the point or 0 otherwise."
+            formula="1" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="DrawOutline"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Use this field to override the colour shown in the legend for the object."
+            formula="randcolour(&quot;vehicle-id&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="LegendColour" sortField="NO"
+            type="COLOUR" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to populate the map's legend."
+            from="vehicle-id" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LegendKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to select objects when you are drawing the map by calling the image formula."
+            from="vehicle-id" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="ImageFormulaKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LabelGroupKey" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="NonOverlappingPolygonLayerGroupKey" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Tooltip"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Selectable" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="LabelPositioningOption" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LabelColour"
+            sortField="NO" type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LabelPriority" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Flags" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MinZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1000" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MaxZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <FilterFormula>len("incoming-path")&gt;0</FilterFormula>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="stop-details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="drawables">
+          <flags>67456</flags>
+          <AdaptedColumn from="stop-latitude" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-longitude" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Geometry of the object. If this is not set a point is draw at the latitude-longitude instead."
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Geometry" sortField="NO"
+            type="GEOM" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The text of this field will be shown on the map beside the point."
+            formula="if(type=&quot;depot&quot;,&quot;depot&quot;,&quot;stop-number&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Label" sortField="NO"
+            type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="randcolour(&quot;vehicle-id&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Colour" sortField="NO"
+            type="COLOUR" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="&lt;html>Name of the symbol used when drawing a point.&lt;br>If this is null a circle is used. &lt;br>Available symbols are &quot;triangle&quot;,&quot;inverted-triangle&quot;,&quot;diamond&quot;,&quot;square&quot;,&quot;pentagon&quot;,&quot;star&quot;,&quot;fat-star&quot;,&quot;hexagon&quot;,&quot;circle&quot;.&lt;/html>"
+            formula="switch(type,&quot;depot&quot;,&quot;fat-star&quot;,&quot;LD&quot;,&quot;inverted-triangle&quot;,&quot;D&quot;,&quot;circle&quot;,&quot;LP&quot;,&quot;triangle&quot;,&quot;P&quot;,&quot;square&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Symbol" sortField="NO"
+            type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set to less than 1 if you want the object to be partially see-through, 0 for completely invisible."
+            formula="1.0" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Opaque"
+            sortField="NO" type="DOUBLE" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="ColourKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn description="The width in pixels of the point."
+            formula="switch(type,&quot;depot&quot;,60,&quot;LD&quot;,36,&quot;D&quot;,24,&quot;LP&quot;,36,&quot;P&quot;,28)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="PixelWidth" sortField="NO"
+            type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The font size for the name. A value of 0 takes the default size. Less than zero deactivates the label."
+            formula="50" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="FontSize"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set this to 1 to draw an outline around the point or 0 otherwise."
+            formula="true" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="DrawOutline"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Use this field to override the colour shown in the legend for the object."
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="LegendColour" sortField="NO"
+            type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to populate the map's legend."
+            from="vehicle-id" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LegendKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to select objects when you are drawing the map by calling the image formula."
+            from="vehicle-id" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="ImageFormulaKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LabelGroupKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="NonOverlappingPolygonLayerGroupKey" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="&quot;arrival-time&quot; &amp; &quot; - &quot;  &amp; &quot;stop-name&quot; &amp; &quot;, &quot; &amp; &quot;stop-address&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Tooltip" sortField="NO"
+            type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Selectable" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="LabelPositioningOption" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LabelColour"
+            sortField="NO" type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LabelPriority" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Flags" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MinZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1000" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MaxZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000" fromDatastore="Input data"
+          fromTable="Stops" isBatchKey="false" isGroupBy="false"
+          isOptional="false" isReportKey="false" name="drawables">
+          <flags>67456</flags>
+          <AdaptedColumn from="latitude" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="longitude" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Geometry of the object. If this is not set a point is draw at the latitude-longitude instead."
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Geometry" sortField="NO"
+            type="GEOM" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The text of this field will be shown on the map beside the point."
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Label" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="&quot;black&quot;" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Colour" sortField="NO" type="COLOUR" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="&lt;html>Name of the symbol used when drawing a point.&lt;br>If this is null a circle is used. &lt;br>Available symbols are &quot;triangle&quot;,&quot;inverted-triangle&quot;,&quot;diamond&quot;,&quot;square&quot;,&quot;pentagon&quot;,&quot;star&quot;,&quot;fat-star&quot;,&quot;hexagon&quot;,&quot;circle&quot;.&lt;/html>"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Symbol" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set to less than 1 if you want the object to be partially see-through, 0 for completely invisible."
+            formula="1.0" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Opaque"
+            sortField="NO" type="DOUBLE" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="ColourKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn description="The width in pixels of the point."
+            formula="40" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="PixelWidth"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="The font size for the name. A value of 0 takes the default size. Less than zero deactivates the label."
+            formula="12" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="FontSize"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Set this to 1 to draw an outline around the point or 0 otherwise."
+            formula="1" isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="DrawOutline"
+            sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="Use this field to override the colour shown in the legend for the object."
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="LegendColour" sortField="NO"
+            type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to populate the map's legend."
+            formula="&quot;Unassigned&quot;" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LegendKey" sortField="NO" type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            description="This key field is used to select objects when you are drawing the map by calling the image formula."
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="ImageFormulaKey" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LabelGroupKey"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="NonOverlappingPolygonLayerGroupKey" sortField="NO"
+            type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="Tooltip"
+            sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Selectable" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false"
+            name="LabelPositioningOption" sortField="NO" type="STRING" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn isBatchKey="false" isGroupBy="false"
+            isOptional="true" isReportKey="false" name="LabelColour"
+            sortField="NO" type="COLOUR" useFormula="false">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="LabelPriority" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="Flags" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="0" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MinZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="1000" isBatchKey="false"
+            isGroupBy="false" isOptional="true" isReportKey="false"
+            name="MaxZoom" sortField="NO" type="LONG" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <FilterFormula>lookupcount(id,"Input data, stop-order","stop-id")=0</FilterFormula>
+        </AdaptedTable>
+      </Adapter>
+      <Instruction
+        component="com.opendoorlogistics.components.reports.reporter"
+        datastore="Report input" executionMode="-1" userCanEdit="true" uuid="c4cf760a-8ec5-465c-8276-370215bc5c03">
+        <Config>
+          <Report CSV="false" DocX="false" Export="false" HTML="false"
+            ODT="false" OpenExportFile="false" PDF="false"
+            ShowViewer="true" XLS="false"/>
+        </Config>
+        <Config>
+          <Report CSV="false" DocX="false" Export="false" HTML="false"
+            ODT="false" OpenExportFile="false" PDF="false"
+            ShowViewer="true" XLS="false"/>
+        </Config>
+      </Instruction>
+    </Option>
+    <Option Name="Gantt chart" OptionId="Gantt chart"
+      launchMultiple="false" overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="true" userCanEdit="true">
+      <Adapter flags="0" id="Gantt input" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="stop-details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="GanttItem">
+          <flags>1920</flags>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="resource-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="&quot;Travel&quot;" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="activity-id" sortField="NO" type="STRING" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="&quot;arrival-time&quot; - &quot;travel-time&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="start-time" sortField="NO"
+            type="TIME" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="&quot;arrival-time&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="end-time" sortField="NO"
+            type="TIME" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="colour(0,0,0.8)" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="colour" sortField="NO" type="COLOUR" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="&quot;Travel to &quot; &amp; &quot;stop-name&quot; &amp; &quot; from &quot; &amp; round2second(&quot;arrival-time&quot; - &quot;travel-time&quot;) &amp; &quot; to &quot; &amp; round2second(&quot;arrival-time&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="name" sortField="NO" type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="stop-details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="GanttItem">
+          <flags>1920</flags>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="resource-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="&quot;Service&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="activity-id" sortField="NO"
+            type="STRING" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="&quot;arrival-time&quot; + &quot;waiting-time&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="start-time" sortField="NO"
+            type="TIME" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="&quot;leave-time&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="end-time" sortField="NO"
+            type="TIME" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="colour(0,0.8,0)" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="colour" sortField="NO" type="COLOUR" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="&quot;Service &quot; &amp; &quot;stop-name&quot; &amp; &quot; from &quot; &amp; round2second(&quot;arrival-time&quot; + &quot;waiting-time&quot;) &amp; &quot; to &quot; &amp; round2second(&quot;leave-time&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="name" sortField="NO" type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="stop-details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="GanttItem">
+          <flags>1920</flags>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="resource-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="&quot;Wait&quot;" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="activity-id" sortField="NO" type="STRING" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="&quot;arrival-time&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="start-time" sortField="NO"
+            type="TIME" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="&quot;arrival-time&quot; + &quot;waiting-time&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="end-time" sortField="NO"
+            type="TIME" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="colour(0.8,0,0)" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="colour" sortField="NO" type="COLOUR" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="&quot;Wait at &quot; &amp; &quot;stop-name&quot; &amp; &quot; from &quot; &amp; round2second(&quot;arrival-time&quot;) &amp; &quot; to &quot; &amp; round2second(&quot;arrival-time&quot; + &quot;waiting-time&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="name" sortField="NO" type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+      </Adapter>
+      <Instruction component="com.opendoorlogistics.components.gantt"
+        datastore="Gantt input" executionMode="-1" userCanEdit="true" uuid="ec30c8f8-cf58-4253-8785-1f594f4f80eb">
+        <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;This shows a Gantt chart where travel time, service time and waiting time are displayed in different colours.&lt;/html&gt;</EditorLabel>
+      </Instruction>
+    </Option>
+    <Option Name="View loads 1" OptionId="View loads 1"
+      launchMultiple="false" overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="true" userCanEdit="true">
+      <Adapter flags="0" id="Input to view loads 1" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="Stop-Details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="LineData">
+          <flags>1920</flags>
+          <AdaptedColumn formula="&quot;vehicle-id&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Key" sortField="NO" type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn
+            formula="decimalhours(&quot;arrival-time&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="X" sortField="NO" type="DOUBLE" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="arrival-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="Y" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="&quot;vehicle-id&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="SortField" sortField="ASCENDING"
+            type="STRING" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="Stop-Details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="LineData">
+          <flags>1920</flags>
+          <AdaptedColumn formula="&quot;vehicle-id&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="true"
+            isReportKey="false" name="Key" sortField="NO" type="STRING" useFormula="true">
+            <flags>1</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="decimalhours(&quot;leave-time&quot;)"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="X" sortField="NO" type="DOUBLE" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="leave-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="Y" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn formula="&quot;vehicle-id&quot;"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="SortField" sortField="ASCENDING"
+            type="STRING" useFormula="true">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+      </Adapter>
+      <Instruction
+        component="com.opendoorlogistics.components.linegraph"
+        datastore="Input to view loads 1" executionMode="-1"
+        userCanEdit="true" uuid="df6fc36b-edec-488b-9d8d-61c2bb9e4071">
+        <Config>
+          <Chart>
+            <nbFilterGroupLevels>0</nbFilterGroupLevels>
+            <title>Load on vehicles over time</title>
+            <XLabel>Decimal hours</XLabel>
+            <YLabel>Quantity 1</YLabel>
+          </Chart>
+        </Config>
+        <Config>
+          <Chart>
+            <nbFilterGroupLevels>0</nbFilterGroupLevels>
+            <title>Load on vehicles over time</title>
+            <XLabel>Decimal hours</XLabel>
+            <YLabel>Quantity 1</YLabel>
+          </Chart>
+        </Config>
+      </Instruction>
+    </Option>
+    <Option Name="Export solution tables"
+      OptionId="Export solution tables" launchMultiple="false"
+      overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="false" userCanEdit="true">
+      <Adapter flags="0" id="Table export data adapter" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="Stop-Details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="Stop-Details">
+          <flags>1920</flags>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="true"
+            name="vehicle-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>16</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="job-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="job-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="vehicle-name" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="vehicle-name" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-number" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-number" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-name" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-name" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="type" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="type" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-address" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-address" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-latitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-longitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="required-skills" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="required-skills" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="has-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="has-violation" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="arrival-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="arrival-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="waiting-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="waiting-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-duration" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-duration" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="leave-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="leave-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="start-time-window" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="start-time-window" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="end-time-window" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="end-time-window" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="time-window-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="time-window-violation" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="arrival-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="arrival-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="arrival-capacity-violation"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="arrival-capacity-violation"
+            sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stop-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stop-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="leave-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="leave-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="leave-capacity-violation"
+            isBatchKey="false" isGroupBy="false" isOptional="false"
+            isReportKey="false" name="leave-capacity-violation"
+            sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-cost" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-cost" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-km" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-km" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="total-travel-cost" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="total-travel-cost" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="total-travel-km" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="total-travel-km" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="total-travel-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="total-travel-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="Route-Details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="Route-Details">
+          <flags>1920</flags>
+          <AdaptedColumn from="vehicle-name" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="vehicle-name" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="vehicle-id" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="true"
+            name="vehicle-id" sortField="NO" type="STRING" useFormula="false">
+            <flags>16</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="skills" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="skills" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="speed-multiplier" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="speed-multiplier" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="stops-count" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="stops-count" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="start-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="start-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="end-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="end-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="has-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="has-violation" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="capacity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="capacity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="capacity-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="capacity-violation" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="deliveries-count" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="deliveries-count" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="delivered-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="delivered-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="end-time-window" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="end-time-window" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="picked-up-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="picked-up-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="pickups-count" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="pickups-count" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="start-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="start-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="start-time-window" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="start-time-window" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="time-window-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="time-window-violation" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-cost" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-cost" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-km" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-km" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="waiting-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="waiting-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="Solution details" fromTable="Solution-Details"
+          isBatchKey="false" isGroupBy="false" isOptional="false"
+          isReportKey="false" name="Solution-Details">
+          <flags>1920</flags>
+          <AdaptedColumn from="used-routes" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="used-routes" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="unassigned-stops" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="unassigned-stops" sortField="NO" type="STRING" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="assigned-stops" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="assigned-stops" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="capacity-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="capacity-violation" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="has-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="has-violation" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="deliveries" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="deliveries" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="delivered-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="delivered-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="picked-up-quantity" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="picked-up-quantity" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="pickups" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="pickups" sortField="NO" type="LONG" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="time-window-violation" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="time-window-violation" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-cost" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-cost" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-km" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-km" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="travel-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="travel-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="waiting-time" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="waiting-time" sortField="NO" type="TIME" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+      </Adapter>
+      <Option Name="Export stop-details" OptionId="Export stop-details"
+        launchMultiple="false" overrideVisibleParameters="false"
+        refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+        synchronised="false" userCanEdit="true">
+        <Output datastore="Table export data adapter"
+          destinationTable="Exported-Stop-Details"
+          inputTable="Stop-Details"
+          type="REPLACE_CONTENTS_OF_EXISTING_TABLE" userCanEdit="true"/>
+      </Option>
+      <Option Name="Export route-details"
+        OptionId="Export route-details" launchMultiple="false"
+        overrideVisibleParameters="false"
+        refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+        synchronised="false" userCanEdit="true">
+        <Output datastore="Table export data adapter"
+          destinationTable="Exported-Route-Details"
+          inputTable="Route-Details"
+          type="REPLACE_CONTENTS_OF_EXISTING_TABLE" userCanEdit="true"/>
+      </Option>
+      <Option Name="Export solution-details"
+        OptionId="Export solution-details" launchMultiple="false"
+        overrideVisibleParameters="false"
+        refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+        synchronised="false" userCanEdit="true">
+        <Output datastore="Table export data adapter"
+          destinationTable="Exported-Solution-Details"
+          inputTable="Solution-Details"
+          type="REPLACE_CONTENTS_OF_EXISTING_TABLE" userCanEdit="true"/>
+      </Option>
+      <Option Name="Export all" OptionId="Export all"
+        launchMultiple="false" overrideVisibleParameters="false"
+        refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+        synchronised="false" userCanEdit="true">
+        <Output datastore="Table export data adapter"
+          destinationTable="Exported-Stop-Details"
+          inputTable="Stop-Details"
+          type="REPLACE_CONTENTS_OF_EXISTING_TABLE" userCanEdit="true"/>
+        <Output datastore="Table export data adapter"
+          destinationTable="Exported-Route-Details"
+          inputTable="Route-Details"
+          type="REPLACE_CONTENTS_OF_EXISTING_TABLE" userCanEdit="true"/>
+        <Output datastore="Table export data adapter"
+          destinationTable="Exported-Solution-Details"
+          inputTable="Solution-Details"
+          type="REPLACE_CONTENTS_OF_EXISTING_TABLE" userCanEdit="true"/>
+      </Option>
+    </Option>
+  </Option>
+  <Option Name="Tools" OptionId="Tools" launchMultiple="false"
+    overrideVisibleParameters="false" refreshButtonAlwaysEnabled="false"
+    showLastRefreshedTime="false" synchronised="false" userCanEdit="true">
+    <Option Name="Create all input tables"
+      OptionId="Create all input tables" launchMultiple="false"
+      overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="false" userCanEdit="true">
+      <Instruction
+        component="com.opendoorlogistics.components.tables.creator.CreateTablesComponent"
+        datastore="external" executionMode="-1"
+        outputDatastore="Output of Create tables" userCanEdit="true" uuid="6424ef35-6ae2-45be-82aa-f90a74c1e8d9">
+        <Config>
+          <Tables userCanEdit="true">
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="Stops">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="id" type="STRING">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="job-id" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="type" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="name" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="address" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="service-duration" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="start-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="end-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="quantity" type="LONG">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="required-skills" type="STRING">
+                <flags>1</flags>
+              </Column>
+            </Table>
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="VehicleTypes">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="vehicle-name" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="vehicle-id" type="STRING">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="start-latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="start-longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="end-latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="end-longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="start-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="end-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="capacity" type="LONG">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="speed-multiplier" type="DOUBLE">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="cost-per-km" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="cost-per-hour" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="waiting-cost-per-hour" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="fixed-cost" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="parking-cost" type="DOUBLE">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="skills" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="number-of-vehicles" type="LONG">
+                <flags>1</flags>
+              </Column>
+            </Table>
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="Stop-order">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="true" name="vehicle-id" type="STRING">
+                <flags>16</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="stop-id" type="STRING">
+                <flags>0</flags>
+              </Column>
+            </Table>
+          </Tables>
+        </Config>
+        <Config>
+          <Tables userCanEdit="true">
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="Stops">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="id" type="STRING">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="job-id" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="type" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="name" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="address" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="service-duration" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="start-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="end-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="quantity" type="LONG">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="required-skills" type="STRING">
+                <flags>1</flags>
+              </Column>
+            </Table>
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="VehicleTypes">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="vehicle-name" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="vehicle-id" type="STRING">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="start-latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="start-longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="end-latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="end-longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="start-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="end-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="capacity" type="LONG">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="speed-multiplier" type="DOUBLE">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="cost-per-km" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="cost-per-hour" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="waiting-cost-per-hour" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="fixed-cost" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="parking-cost" type="DOUBLE">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="skills" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="number-of-vehicles" type="LONG">
+                <flags>1</flags>
+              </Column>
+            </Table>
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="Stop-order">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="true" name="vehicle-id" type="STRING">
+                <flags>16</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="stop-id" type="STRING">
+                <flags>0</flags>
+              </Column>
+            </Table>
+          </Tables>
+        </Config>
+      </Instruction>
+      <Output datastore="Output of Create tables" destinationTable=""
+        inputTable="" type="COPY_ALL_TABLES" userCanEdit="true"/>
+    </Option>
+    <Option Name="Create stops table" OptionId="Create stops table"
+      launchMultiple="false" overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="false" userCanEdit="true">
+      <Instruction
+        component="com.opendoorlogistics.components.tables.creator.CreateTablesComponent"
+        datastore="external" executionMode="-1"
+        outputDatastore="Output of Create tables1" userCanEdit="true" uuid="7dfef4b9-b925-4ec5-a997-d3a2458471a8">
+        <Config>
+          <Tables userCanEdit="true">
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="Stops">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="id" type="STRING">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="job-id" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="type" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="name" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="address" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="service-duration" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="start-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="end-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="quantity" type="LONG">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="required-skills" type="STRING">
+                <flags>1</flags>
+              </Column>
+            </Table>
+          </Tables>
+        </Config>
+        <Config>
+          <Tables userCanEdit="true">
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="Stops">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="id" type="STRING">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="job-id" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="type" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="name" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="address" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="service-duration" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="start-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="end-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="quantity" type="LONG">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="required-skills" type="STRING">
+                <flags>1</flags>
+              </Column>
+            </Table>
+          </Tables>
+        </Config>
+      </Instruction>
+      <Output datastore="Output of Create tables1"
+        destinationTable="Stops" inputTable="Stops"
+        type="COPY_TO_NEW_TABLE" userCanEdit="true"/>
+    </Option>
+    <Option Name="Create vehicletypes table"
+      OptionId="Create vehicletypes table" launchMultiple="false"
+      overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="false" userCanEdit="true">
+      <Instruction
+        component="com.opendoorlogistics.components.tables.creator.CreateTablesComponent"
+        datastore="external" executionMode="-1"
+        outputDatastore="Output of Create tables2" userCanEdit="true" uuid="c59d8813-e6f2-4081-902a-9e0ba7a70137">
+        <Config>
+          <Tables userCanEdit="true">
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="VehicleTypes">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="vehicle-name" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="vehicle-id" type="STRING">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="start-latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="start-longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="end-latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="end-longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="start-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="end-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="capacity" type="LONG">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="speed-multiplier" type="DOUBLE">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="cost-per-km" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="cost-per-hour" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="waiting-cost-per-hour" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="fixed-cost" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="parking-cost" type="DOUBLE">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="skills" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="number-of-vehicles" type="LONG">
+                <flags>1</flags>
+              </Column>
+            </Table>
+          </Tables>
+        </Config>
+        <Config>
+          <Tables userCanEdit="true">
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="VehicleTypes">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="vehicle-name" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="vehicle-id" type="STRING">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="start-latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="start-longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="end-latitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="end-longitude" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="start-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="end-time" type="TIME">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="capacity" type="LONG">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="speed-multiplier" type="DOUBLE">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="cost-per-km" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="cost-per-hour" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false"
+                name="waiting-cost-per-hour" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="fixed-cost" type="DOUBLE">
+                <flags>0</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="parking-cost" type="DOUBLE">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false" name="skills" type="STRING">
+                <flags>1</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="true" isReportKey="false"
+                name="number-of-vehicles" type="LONG">
+                <flags>1</flags>
+              </Column>
+            </Table>
+          </Tables>
+        </Config>
+      </Instruction>
+      <Output datastore="Output of Create tables2"
+        destinationTable="VehicleTypes" inputTable="VehicleTypes"
+        type="COPY_TO_NEW_TABLE" userCanEdit="true"/>
+    </Option>
+    <Option Name="Create stop-order table"
+      OptionId="Create stop-order table" launchMultiple="false"
+      overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="false" userCanEdit="true">
+      <Instruction
+        component="com.opendoorlogistics.components.tables.creator.CreateTablesComponent"
+        datastore="external" executionMode="-1"
+        outputDatastore="Output of Create tables3" userCanEdit="true" uuid="0db071d7-7e96-4143-9ea7-e84a913d1913">
+        <Config>
+          <Tables userCanEdit="true">
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="Stop-order">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="true" name="vehicle-id" type="STRING">
+                <flags>16</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="stop-id" type="STRING">
+                <flags>0</flags>
+              </Column>
+            </Table>
+          </Tables>
+        </Config>
+        <Config>
+          <Tables userCanEdit="true">
+            <Table isBatchKey="false" isGroupBy="false"
+              isOptional="false" isReportKey="false" name="Stop-order">
+              <flags>1920</flags>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="true" name="vehicle-id" type="STRING">
+                <flags>16</flags>
+              </Column>
+              <Column isBatchKey="false" isGroupBy="false"
+                isOptional="false" isReportKey="false" name="stop-id" type="STRING">
+                <flags>0</flags>
+              </Column>
+            </Table>
+          </Tables>
+        </Config>
+      </Instruction>
+      <Output datastore="Output of Create tables3"
+        destinationTable="Stop-order" inputTable="Stop-order"
+        type="COPY_TO_NEW_TABLE" userCanEdit="true"/>
+    </Option>
+    <Option Name="Demo - create stops and vehicles"
+      OptionId="Demo - create stops and vehicles" launchMultiple="false"
+      overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="false" userCanEdit="true">
+      <Instruction component="com.opendoorlogistics.components.jsprit"
+        configId="Settings" datastore="Input data" executionMode="1001"
+        outputDatastore="Output of Vehicle routing (JSPRIT)1"
+        userCanEdit="true" uuid="fb6f5300-6221-4a9b-a1fe-68bcf9f32f69"/>
+    </Option>
+    <Option Name="Validate data relations"
+      OptionId="Validate data relations" launchMultiple="false"
+      overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="false" userCanEdit="true">
+      <Instruction component="com.opendoorlogistics.components.jsprit"
+        configId="Settings" datastore="Input data" executionMode="1"
+        outputDatastore="Output of Vehicle routing (JSPRIT)2"
+        userCanEdit="true" uuid="dbae0cd4-3bf5-4294-94ba-3a7c53a1445d"/>
+    </Option>
+    <Option Name="Export travel matrix" OptionId="Export matrix"
+      launchMultiple="false" overrideVisibleParameters="false"
+      refreshButtonAlwaysEnabled="false" showLastRefreshedTime="false"
+      synchronised="false" userCanEdit="true">
+      <EditorLabel>&lt;html&gt;&lt;body style='width: 350 px'&gt;Run this option to export a matrix of travel distances and times between all locations to a text file. &lt;b&gt;Warning&lt;/b&gt; - the matrix exporter has its own settings for distance generation, independent of the main distances settings. If you want to export the exact same matrix as the optimiser is using, ensure your matrix exporter distance settings are identical to the main ones.&lt;/html&gt;</EditorLabel>
+      <Adapter flags="0" id="1. Export matrix input data (ungrouped)" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000" fromDatastore="Input data"
+          fromTable="Stops" isBatchKey="false" isGroupBy="false"
+          isOptional="false" isReportKey="false" name="Locations">
+          <flags>1920</flags>
+          <AdaptedColumn from="latitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="longitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000" fromDatastore="Input data"
+          fromTable="VehicleTypes" isBatchKey="false" isGroupBy="false"
+          isOptional="false" isReportKey="false" name="Locations">
+          <flags>1920</flags>
+          <AdaptedColumn from="start-latitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="start-longitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000" fromDatastore="Input data"
+          fromTable="VehicleTypes" isBatchKey="false" isGroupBy="false"
+          isOptional="false" isReportKey="false" name="Locations">
+          <flags>1920</flags>
+          <AdaptedColumn from="end-latitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="end-longitude" isBatchKey="false"
+            isGroupBy="false" isOptional="false" isReportKey="false"
+            name="longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>0</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+      </Adapter>
+      <Adapter flags="0" id="2. Export matrix input data (grouped)" userCanEdit="true">
+        <adapterType>NORMAL</adapterType>
+        <AdaptedTable FetchSourceFields="false" IsLimitedResults="false"
+          Join="false" MaxNumberRows="1000"
+          fromDatastore="1. Export matrix input data (ungrouped)"
+          fromTable="Locations" isBatchKey="false" isGroupBy="false"
+          isOptional="false" isReportKey="false" name="Locations">
+          <flags>1920</flags>
+          <AdaptedColumn from="latitude" isBatchKey="false"
+            isGroupBy="true" isOptional="false" isReportKey="false"
+            name="latitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>32</flags>
+          </AdaptedColumn>
+          <AdaptedColumn from="longitude" isBatchKey="false"
+            isGroupBy="true" isOptional="false" isReportKey="false"
+            name="longitude" sortField="NO" type="DOUBLE" useFormula="false">
+            <flags>32</flags>
+          </AdaptedColumn>
+          <FilterFormula/>
+        </AdaptedTable>
+      </Adapter>
+      <Instruction Name="Export matrix"
+        component="com.opendoorlogistics.components.matrixexporter"
+        datastore="2. Export matrix input data (grouped)"
+        executionMode="-1" userCanEdit="true" uuid="ca2f0a40-d7b5-4d3f-a1ae-8b30d0c3e574">
+        <Config>
+          <travelMatrixExporterConfig>
+            <distancesConfiguration>
+              <externalConfig>
+                <nonDefaultFilename/>
+                <useDefaultFile>true</useDefaultFile>
+              </externalConfig>
+              <graphhopperConfig>
+                <timeMultiplier>1.0</timeMultiplier>
+              </graphhopperConfig>
+              <greatCircleConfig>
+                <DistanceMultiplier>1.0</DistanceMultiplier>
+                <SpeedMetresPerSec>22.352</SpeedMetresPerSec>
+              </greatCircleConfig>
+              <method>GREAT_CIRCLE</method>
+              <outputConfig>
+                <DistanceWeighting>1.0</DistanceWeighting>
+                <DistanceOutputUnit>KILOMETRES</DistanceOutputUnit>
+                <TimeOutputUnit>HOURS</TimeOutputUnit>
+                <OutputTime>DISTANCE</OutputTime>
+                <TimeWeighting>1.0</TimeWeighting>
+              </outputConfig>
+            </distancesConfiguration>
+            <exportFilename/>
+            <includeId>false</includeId>
+          </travelMatrixExporterConfig>
+        </Config>
+        <Config>
+          <travelMatrixExporterConfig>
+            <distancesConfiguration>
+              <externalConfig>
+                <nonDefaultFilename/>
+                <useDefaultFile>true</useDefaultFile>
+              </externalConfig>
+              <graphhopperConfig>
+                <timeMultiplier>1.0</timeMultiplier>
+              </graphhopperConfig>
+              <greatCircleConfig>
+                <DistanceMultiplier>1.0</DistanceMultiplier>
+                <SpeedMetresPerSec>22.352</SpeedMetresPerSec>
+              </greatCircleConfig>
+              <method>GREAT_CIRCLE</method>
+              <outputConfig>
+                <DistanceWeighting>1.0</DistanceWeighting>
+                <DistanceOutputUnit>KILOMETRES</DistanceOutputUnit>
+                <TimeOutputUnit>HOURS</TimeOutputUnit>
+                <OutputTime>DISTANCE</OutputTime>
+                <TimeWeighting>1.0</TimeWeighting>
+              </outputConfig>
+            </distancesConfiguration>
+            <exportFilename/>
+            <includeId>false</includeId>
+          </travelMatrixExporterConfig>
+        </Config>
+      </Instruction>
+    </Option>
+  </Option>
+  <CreatedByComponent>com.opendoorlogistics.components.jsprit</CreatedByComponent>
+  <ScriptFormatVersion major="1" minor="0" revision="0"/>
+</Script>
